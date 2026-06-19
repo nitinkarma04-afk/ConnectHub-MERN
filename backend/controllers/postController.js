@@ -100,9 +100,9 @@ export const addComment =
 };
 export const createPost =
   async (req, res) => {
-
+        
     try {
-
+     console.log("Creating Post...");
       const post =
         await Post.create({
 
@@ -120,14 +120,16 @@ export const createPost =
         post,
       });
 
-    } catch (error) {
+  } catch (error) {
 
-      res.status(500).json({
-        message:
-          error.message,
-      });
+  console.log(error);
 
-    }
+  res.status(500).json({
+    message: error.message,
+  });
+
+}
+
 };
 
 export const getPosts =
