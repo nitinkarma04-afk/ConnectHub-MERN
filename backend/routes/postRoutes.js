@@ -6,7 +6,8 @@ from "../middleware/authMiddleware.js";
 import {
   createPost,
   getPosts,
-  likePost
+  likePost,
+  addComment
 }
 from "../controllers/postController.js";
 
@@ -27,5 +28,10 @@ router.put(
   "/like/:id",
   protect,
   likePost
+);
+router.post(
+  "/comment/:id",
+  protect,
+  addComment
 );
 export default router;

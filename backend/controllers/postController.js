@@ -53,7 +53,51 @@ export const likePost =
 
     }
 };
+export const addComment =
+  async (req, res) => {
 
+    try {
+
+      const post =
+        await Post.findById(
+          req.params.id
+        );
+
+      if (!post) {
+
+        return res.status(404).json({
+          message: "Post Not Found",
+        });
+
+      }
+
+      const comment = {
+        user: req.user.id,
+        text: req.body.text,
+      };
+
+      post.comments.push(
+        comment
+      );
+
+      await post.save();
+
+      res.json({
+        message:
+          "Comment Added",
+        comments:
+          post.comments,
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+};
 export const createPost =
   async (req, res) => {
 
