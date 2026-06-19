@@ -1,10 +1,11 @@
 import express from "express";
-
+ 
 import protect
 from "../middleware/authMiddleware.js";
 
 import {
   followUser,
+  getProfile,
 }
 from "../controllers/userController.js";
 
@@ -16,5 +17,9 @@ router.put(
   protect,
   followUser
 );
-
+router.get(
+  "/profile/:id",
+  getProfile
+);
+ 
 export default router;

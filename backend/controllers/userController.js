@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Post from "../models/Post.js";
 
 export const followUser =
   async (req, res) => {
@@ -52,6 +53,56 @@ export const followUser =
         message:
           "User Followed",
       });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+};
+
+
+export const getProfile =
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.params.id
+        )
+        .select("-password")
+        .populate(
+          "followers",
+          "name email"
+        )
+        .populate(
+          "following",
+          "name email"
+        );
+
+      if (!user) {
+
+        return res.status(404).json({
+          message:
+            "User Not Found",
+        });
+
+      }
+
+      const posts =
+  await Post.find({
+    user: user._id,
+  });
+
+res.json({
+  user,
+  totalPosts:
+    posts.length,
+}); 
 
     } catch (error) {
 
