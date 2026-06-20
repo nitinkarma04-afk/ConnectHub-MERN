@@ -113,3 +113,52 @@ res.json({
 
     }
 };
+
+
+
+
+export const updateProfile =
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      if (!user) {
+
+        return res.status(404).json({
+          message: "User Not Found",
+        });
+
+      }
+
+      user.name =
+        req.body.name ||
+        user.name;
+
+      user.bio =
+        req.body.bio ||
+        user.bio;
+
+      await user.save();
+
+      res.json({
+        message:
+          "Profile Updated Successfully",
+
+        user,
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+
+};

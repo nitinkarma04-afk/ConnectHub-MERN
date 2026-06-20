@@ -6,6 +6,7 @@ from "../middleware/authMiddleware.js";
 import {
   followUser,
   getProfile,
+  updateProfile,
 }
 from "../controllers/userController.js";
 
@@ -21,5 +22,10 @@ router.get(
   "/profile/:id",
   getProfile
 );
- 
+router.put(
+  "/update",
+  protect,
+  updateProfile
+);
+
 export default router;
