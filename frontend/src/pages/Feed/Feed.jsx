@@ -1,5 +1,9 @@
  import { useEffect, useState } from "react";
-import { getAllPosts } from "../../services/postService";
+import {
+  getAllPosts,
+  likePost,
+}
+from "../../services/postService";
 
 import Navbar from "../../components/Navbar/Navbar";
 import CreatePost from "../../components/CreatePost/CreatePost";
@@ -21,6 +25,31 @@ const Feed = () => {
     }
   };
 
+  const handleLike =
+  async (postId) => {
+
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      await likePost(
+        postId,
+        token
+      );
+
+      fetchPosts();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+};
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <Navbar />
@@ -37,9 +66,10 @@ const Feed = () => {
             <div className="space-y-6 mt-8">
               {posts.map((post) => (
                 <PostCard
-                  key={post._id}
-                  post={post}
-                />
+  key={post._id}
+  post={post}
+  handleLike={handleLike}
+/>
               ))}
             </div>
 

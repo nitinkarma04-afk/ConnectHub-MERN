@@ -30,3 +30,24 @@ export const getAllPosts = async () => {
 
   return res.data;
 };
+
+export const likePost = async (
+  postId,
+  token
+) => {
+
+  const res =
+    await axios.put(
+      `${API}/like/${postId}`,
+      {},
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return res.data;
+};
+

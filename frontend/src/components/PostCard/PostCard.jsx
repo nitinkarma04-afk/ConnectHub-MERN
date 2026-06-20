@@ -4,7 +4,10 @@ import {
   FiSend,
 } from "react-icons/fi";
 
-const PostCard = ({ post }) => {
+const PostCard = ({
+  post,
+  handleLike,
+}) => {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 hover:border-blue-500/40 hover:-translate-y-1 transition-all duration-300">
 
@@ -34,11 +37,15 @@ const PostCard = ({ post }) => {
 
       <div className="flex gap-8 mt-6 text-slate-400">
 
-        <button className="flex items-center gap-2 hover:text-red-500">
-          <FiHeart />
-          {post.likes?.length}
-        </button>
-
+        <button
+  onClick={() =>
+    handleLike(post._id)
+  }
+  className="flex items-center gap-2 hover:text-red-500"
+>
+  <FiHeart />
+  {post.likes?.length}
+</button>
         <button className="flex items-center gap-2 hover:text-blue-500">
           <FiMessageCircle />
          {post.comments?.length}

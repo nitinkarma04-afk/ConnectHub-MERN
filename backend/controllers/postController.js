@@ -1,6 +1,6 @@
 import Post from "../models/Post.js";
 
-export const likePost =
+ export const likePost =
   async (req, res) => {
 
     try {
@@ -26,9 +26,18 @@ export const likePost =
 
       if (alreadyLiked) {
 
-        return res.status(400).json({
+        post.likes =
+          post.likes.filter(
+            (id) =>
+              id.toString() !==
+              req.user.id
+          );
+
+        await post.save();
+
+        return res.json({
           message:
-            "Already Liked",
+            "Post Unliked",
         });
 
       }
@@ -52,6 +61,7 @@ export const likePost =
       });
 
     }
+
 };
 export const addComment =
   async (req, res) => {
