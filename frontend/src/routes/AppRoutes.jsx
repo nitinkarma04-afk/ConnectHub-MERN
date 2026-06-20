@@ -6,6 +6,8 @@ import Register from "../pages/Register/Register";
 import Feed from "../pages/Feed/Feed";
 import Profile from "../pages/Profile/Profile";
 
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -27,12 +29,20 @@ const AppRoutes = () => {
 
       <Route
         path="/feed"
-        element={<Feed />}
+        element={
+          <ProtectedRoute>
+            <Feed />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/profile"
-        element={<Profile />}
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
       />
 
     </Routes>

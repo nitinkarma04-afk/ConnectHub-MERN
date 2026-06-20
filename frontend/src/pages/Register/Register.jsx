@@ -1,6 +1,80 @@
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate
+} from "react-router-dom";
+
+import { useState } from "react";
+
+import toast from "react-hot-toast";
+
+import {
+  registerUser
+} from "../../services/authService";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+const [formData, setFormData] =
+  useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+
+  setFormData({
+    ...formData,
+    [e.target.name]:
+      e.target.value,
+  });
+
+};
+
+const handleRegister =
+  async (e) => {
+
+    e.preventDefault();
+
+    console.log(formData);
+
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
+
+      toast.error(
+        "Passwords do not match"
+      );
+
+      return;
+    }
+
+    try {
+
+      await registerUser({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      toast.success(
+        "Account Created 🚀"
+      );
+
+      navigate("/login");
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+        "Registration Failed"
+      );
+
+    }
+
+};
   return (
     <div className="min-h-screen bg-slate-950 text-white">
 
@@ -10,7 +84,7 @@ const Register = () => {
 
         <div className="hidden lg:flex flex-col justify-center px-20 relative overflow-hidden">
 
-          <div className="absolute top-20 left-20 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl"></div>
+          <div className="absolute top-20 left-20 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl"> </div>
 
           <div className="absolute bottom-20 right-20 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
 
@@ -62,31 +136,54 @@ const Register = () => {
   By creating an account, you agree to our Terms & Privacy Policy.
 </p>
 
-            <form className="mt-8 space-y-5">
+            <form
+  onSubmit={handleRegister}
+  className="mt-8 space-y-5"
+>
 
               <input
-                type="text"
-                placeholder="Full Name"
+               type="text"
+  name="name"
+  value={formData.name}
+  onChange={handleChange}
+  placeholder="Full Name"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
               />
 
               <input
                 type="email"
-                placeholder="Email Address"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="Email Address"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
               />
 
               <input
                 type="password"
-                placeholder="Password"
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
+  placeholder="Password"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
               />
+ 
 
               <input
                 type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 placeholder="Confirm Password"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
               />
+
+               
+
+              
+       
+
+          
 
               <button
                 type="submit"

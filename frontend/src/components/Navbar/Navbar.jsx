@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate
+} from "react-router-dom";
 import {
   FiHome,
   FiUser,
@@ -7,6 +10,26 @@ import {
 } from "react-icons/fi";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const user =
+  JSON.parse(
+    localStorage.getItem("user")
+  );
+
+  const handleLogout = () => {
+
+  localStorage.removeItem(
+    "token"
+  );
+
+  localStorage.removeItem(
+    "user"
+  );
+
+  navigate("/login");
+
+};
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/70 backdrop-blur-xl shadow-xl">
 
@@ -68,9 +91,20 @@ const Navbar = () => {
               <FiBell size={22} />
             </button>
 
-            <button className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full font-semibold transition">
-              Login
-            </button>
+            <div className="flex items-center gap-3">
+
+  <span className="text-sm text-slate-300">
+    {user?.name}
+  </span>
+
+  <button
+    onClick={handleLogout}
+    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-semibold transition"
+  >
+    Logout
+  </button>
+
+</div>
 
           </nav>
 

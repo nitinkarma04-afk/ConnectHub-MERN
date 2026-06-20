@@ -1,6 +1,72 @@
-import { Link } from "react-router-dom";
+ import {
+  Link,
+  useNavigate
+} from "react-router-dom";
+
+import { useState } from "react";
+import toast from "react-hot-toast";
+
+import { loginUser }
+from "../../services/authService";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+const [formData, setFormData] =
+  useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+
+  setFormData({
+    ...formData,
+    [e.target.name]:
+      e.target.value,
+  });
+
+};
+  const handleLogin =
+  async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      const data =
+        await loginUser(
+          formData
+        );
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(
+          data.user
+        )
+      );
+
+      toast.success(
+        "Login Successful 🚀"
+      );
+
+      navigate("/feed");
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+        "Login Failed"
+      );
+
+    }
+
+};
   return (
     <div className="min-h-screen bg-slate-950 text-white">
 
@@ -64,19 +130,28 @@ const Login = () => {
 
             </p>
 
-            <form className="mt-8 space-y-5">
+            <form
+  onSubmit={handleLogin}
+  className="mt-8 space-y-5"
+>
 
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
-              />
+             <input
+  type="email"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="Email Address"
+  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
+/>
 
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
-              />
+             <input
+  type="password"
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
+  placeholder="Password"
+  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none focus:border-blue-500"
+/>
 
               <button
                 type="submit"
