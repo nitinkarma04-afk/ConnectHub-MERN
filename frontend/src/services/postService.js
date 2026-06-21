@@ -50,4 +50,27 @@ export const likePost = async (
 
   return res.data;
 };
+export const addComment =
+  async (
+    postId,
+    commentData,
+    token
+  ) => {
+
+    const res =
+      await axios.post(
+        `${API}/comment/${postId}`,
+        commentData,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return res.data;
+};
+
+
 

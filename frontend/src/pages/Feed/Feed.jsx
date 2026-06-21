@@ -2,8 +2,14 @@
 import {
   getAllPosts,
   likePost,
+  addComment,
 }
 from "../../services/postService";
+import {
+  getProfile,
+  followUser,
+}
+from "../../services/userService";
 
 import Navbar from "../../components/Navbar/Navbar";
 import CreatePost from "../../components/CreatePost/CreatePost";
@@ -50,6 +56,63 @@ const Feed = () => {
 
 };
 
+const handleComment =
+  async (
+    postId,
+    text
+  ) => {
+
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      await addComment(
+        postId,
+        { text },
+        token
+      );
+
+      fetchPosts();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+}
+  
+const handleFollow =
+  async (
+    userId
+  ) => {
+
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      await followUser(
+        userId,
+        token
+      );
+
+      fetchPosts();
+
+    } catch (error) {
+
+  console.log(
+    error.response?.data
+  );
+
+    }
+
+}
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <Navbar />
@@ -65,10 +128,12 @@ const Feed = () => {
             {/* Posts */}
             <div className="space-y-6 mt-8">
               {posts.map((post) => (
-                <PostCard
+               <PostCard
   key={post._id}
   post={post}
   handleLike={handleLike}
+  handleComment={handleComment}
+  handleFollow={handleFollow}
 />
               ))}
             </div>

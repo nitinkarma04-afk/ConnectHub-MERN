@@ -31,3 +31,23 @@ export const updateProfile =
 
     return res.data;
 };
+export const followUser =
+  async (
+    userId,
+    token
+  ) => {
+
+    const res =
+      await axios.put(
+        `${API}/follow/${userId}`,
+        {},
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return res.data;
+};
