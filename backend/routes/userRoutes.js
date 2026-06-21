@@ -7,6 +7,7 @@ import {
   followUser,
   getProfile,
   updateProfile,
+  searchUsers,
 }
 from "../controllers/userController.js";
 
@@ -26,6 +27,10 @@ router.put(
   "/update",
   protect,
   updateProfile
+);
+router.get(
+  "/search",
+  searchUsers
 );
 
 export default router;

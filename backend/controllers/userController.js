@@ -162,3 +162,36 @@ export const updateProfile =
     }
 
 };
+
+
+
+export const searchUsers =
+  async (req, res) => {
+
+    try {
+
+      const keyword =
+        req.query.search;
+
+      const users =
+        await User.find({
+          name: {
+            $regex: keyword,
+            $options: "i",
+          },
+        }).select(
+          "name email"
+        );
+
+      res.json(users);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+
+};

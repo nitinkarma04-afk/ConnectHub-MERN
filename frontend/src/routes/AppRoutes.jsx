@@ -37,10 +37,10 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/profile"
-        element={
+        path="/profile/:id"
+         element={
           <ProtectedRoute>
-            <Profile />
+         <Profile />
           </ProtectedRoute>
         }
       />

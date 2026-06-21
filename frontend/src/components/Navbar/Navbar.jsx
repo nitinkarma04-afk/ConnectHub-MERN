@@ -1,7 +1,5 @@
-import {
-  Link,
-  useNavigate
-} from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FiHome,
   FiUser,
@@ -9,26 +7,47 @@ import {
   FiSearch,
 } from "react-icons/fi";
 
+import { searchUsers } from "../../services/userService";
+
 const Navbar = () => {
   const navigate = useNavigate();
-  const user =
-  JSON.parse(
+
+  const user = JSON.parse(
     localStorage.getItem("user")
   );
 
+  const [search, setSearch] =
+    useState("");
+
+  const [results, setResults] =
+    useState([]);
+
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-  localStorage.removeItem(
-    "token"
-  );
+    navigate("/login");
+  };
 
-  localStorage.removeItem(
-    "user"
-  );
+  const handleSearch = async (e) => {
+    const value = e.target.value;
 
-  navigate("/login");
+    setSearch(value);
 
-};
+    if (value.length < 1) {
+      setResults([]);
+      return;
+    }
+
+    try {
+      const data =
+        await searchUsers(value);
+
+      setResults(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/70 backdrop-blur-xl shadow-xl">
@@ -39,33 +58,74 @@ const Navbar = () => {
 
           {/* Logo */}
 
-         <Link
-  to="/"
-  className="flex items-center gap-3"
->
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+          >
+            <div className="h-3 w-3 rounded-full bg-blue-500 shadow-[0_0_20px_#3b82f6]" />
 
-  <div className="h-3 w-3 rounded-full bg-blue-500 shadow-[0_0_20px_#3b82f6]" />
-
-  <span className="text-3xl font-extrabold text-white">
-    Connect
-    <span className="text-blue-500">
-      Hub
-    </span>
-  </span>
-
-</Link>
+            <span className="text-3xl font-extrabold text-white">
+              Connect
+              <span className="text-blue-500">
+                Hub
+              </span>
+            </span>
+          </Link>
 
           {/* Search */}
 
-          <div className="hidden lg:flex items-center bg-slate-900 border border-slate-800 rounded-full px-4 py-3 w-96">
+          <div className="relative hidden lg:block">
 
-            <FiSearch className="text-slate-400" />
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded-full px-4 py-3 w-96">
 
-            <input
-              type="text"
-              placeholder="Search people, posts..."
-              className="bg-transparent outline-none ml-3 w-full text-white placeholder:text-slate-500"
-            />
+              <FiSearch className="text-slate-400" />
+
+              <input
+                type="text"
+                value={search}
+                onChange={handleSearch}
+                placeholder="Search users..."
+                className="bg-transparent outline-none ml-3 w-full text-white placeholder:text-slate-500"
+              />
+
+            </div>
+
+            {results.length > 0 && (
+
+              <div className="absolute top-16 left-0 w-full bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+
+                {results.map((u) => (
+
+                  <div
+                    key={u._id}
+                    onClick={() => {
+
+                      navigate(
+                        `/profile/${u._id}`
+                      );
+
+                      setSearch("");
+                      setResults([]);
+
+                    }}
+                    className="p-3 border-b border-slate-800 cursor-pointer hover:bg-slate-800 transition"
+                  >
+
+                    <p className="font-semibold text-white">
+                      {u.name}
+                    </p>
+
+                    <p className="text-sm text-slate-400">
+                      {u.email}
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
 
           </div>
 
@@ -81,7 +141,7 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to="/profile"
+              to={`/profile/${user?.id}`}
               className="text-slate-300 hover:text-blue-500 transition"
             >
               <FiUser size={22} />
@@ -93,18 +153,18 @@ const Navbar = () => {
 
             <div className="flex items-center gap-3">
 
-  <span className="text-sm text-slate-300">
-    {user?.name}
-  </span>
+              <span className="text-sm text-slate-300">
+                {user?.name}
+              </span>
 
-  <button
-    onClick={handleLogout}
-    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-semibold transition"
-  >
-    Logout
-  </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-semibold transition"
+              >
+                Logout
+              </button>
 
-</div>
+            </div>
 
           </nav>
 

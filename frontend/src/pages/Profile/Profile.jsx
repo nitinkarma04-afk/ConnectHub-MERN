@@ -7,11 +7,16 @@ import {
 
 import toast from "react-hot-toast";
 
-const Profile = () => {
+import { useParams } from "react-router-dom";
 
+ 
+
+const Profile = () => {
+ const { id } = useParams();
 const currentUser = JSON.parse(
   localStorage.getItem("user")
 );
+
  
 
 const [profileData, setProfileData] =
@@ -27,16 +32,14 @@ const [editData, setEditData] =
 
 useEffect(() => {
   fetchProfile();
-}, []);
+}, [id]);
 
 const fetchProfile = async () => {
 
   try {
 
     const data =
-      await getProfile(
-        currentUser.id
-      );
+  await getProfile(id);
 
     console.log(data);
 
@@ -245,28 +248,31 @@ toast.success(
 
         {/* Edit Button */}
 
-        <div className="mt-8">
+        {currentUser?.id === id && (
 
-         <button
-  onClick={() => {
+  <div className="mt-8">
 
-    setEditData({
-      name:
-        profileData?.user?.name || "",
+    <button
+      onClick={() => {
 
-      bio:
-        profileData?.user?.bio || "",
-    });
+        setEditData({
+          name:
+            profileData?.user?.name || "",
+          bio:
+            profileData?.user?.bio || "",
+        });
 
-    setShowModal(true);
+        setShowModal(true);
 
-  }}
-  className="bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-3 rounded-xl font-semibold hover:scale-105 transition"
->
-  Edit Profile
-</button>
+      }}
+      className="bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-3 rounded-xl font-semibold hover:scale-105 transition"
+    >
+      Edit Profile
+    </button>
 
-        </div>
+  </div>
+
+)}
 
         {/* Recent Activity */}
 

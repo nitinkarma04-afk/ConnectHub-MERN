@@ -51,3 +51,16 @@ export const followUser =
 
     return res.data;
 };
+
+
+export const searchUsers =
+  async (keyword) => {
+
+    const res =
+      await axios.get(
+        `${API}/search?search=${keyword}`
+      );
+
+    return res.data;
+
+};
